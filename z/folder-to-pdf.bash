@@ -1,7 +1,8 @@
 for folder in $@; do
+    echo
     echo $folder
     cd $folder
-    ../convert-to-pdf.bash
+    ../z/convert-to-pdf.bash
     cd ..
 done
 
