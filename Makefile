@@ -10,6 +10,8 @@ TARGETS=$(subst .odp,.pdf,$(subst .odt,.pdf,$(SOURCES)))
 
 all: $(TARGETS)
 	#
+	git commit -m "update documents and pdfs"
+	git push
 
 #
 #TARGETS: $(TARGETS)
@@ -19,11 +21,13 @@ all: $(TARGETS)
 	#
 	$(MAKEPDF) $< --outdir $(@D)
 	git add $@
+	git add $<
 
 %.pdf: %.odp
 	#
 	$(MAKEPDF) $< --outdir $(@D)
 	git add $@
+	git add $<
 
 clean:
 	rm -f *.pdf
