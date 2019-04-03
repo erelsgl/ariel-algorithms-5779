@@ -1,33 +1,36 @@
-#!make -f
+#!/usr/bin/make -f
 # A makefile for building pdf files from the text (odt files) and slides (odp files).
 # Author: Erel Segal-Halevi
 # Since: 2019-02
 
-MAKEPDF=libreoffice --headless --convert-to pdf
+SOURCES_ODP=$(shell find . -name '*.odp')
+TARGETS_ODP=$(subst .odp,.pdf,$(SOURCES_ODP))
+SOURCES_ODT=$(shell find . -name '*.odt')
+TARGETS_ODT=$(subst .odt,.pdf,$(SOURCES_ODT))
 
-SOURCES=$(shell find . -name '*.od*')
-TARGETS=$(subst .odp,.pdf,$(subst .odt,.pdf,$(SOURCES)))
-
-all: $(TARGETS)
+all: $(TARGETS_ODP) $(TARGETS_ODT)
 	#
-	git commit -m "update documents and pdfs"
+	git commit -m "update pdf files"
 	git push
-
-#
-#TARGETS: $(TARGETS)
-#
 
 %.pdf: %.odt
 	#
-	$(MAKEPDF) $< --outdir $(@D)
+	libreoffice --headless --convert-to pdf $< --outdir $(@D)
 	git add $@
 	git add $<
 
+xyz.pdf: xyz.odt
+	#
+	libreoffice --headless --convert-to pdf xyz.odt --outdir $(@D)
+	git add xyz.pdf
+	git add xyz.odt
+
 %.pdf: %.odp
 	#
-	$(MAKEPDF) $< --outdir $(@D)
+	libreoffice --headless --convert-to pdf $< --outdir $(@D)
 	git add $@
 	git add $<
 
 clean:
 	rm -f *.pdf
+
