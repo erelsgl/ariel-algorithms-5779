@@ -3,13 +3,17 @@
 // Created  by: Sebastian C. Burgel 
 // Modified by: Erel Segal-Halevi
 
-pragma solidity ^0.4.11;
+pragma solidity ^0.5.9;
 
 contract RockPaperScissors {
   /* General utilities */  
+  
+  address payable constant null_address = address(0);
 
   // These will be assigned at the construction/ phase, where `msg.sender` is the account creating this contract.
-  address public owner = msg.sender;
+  address payable private owner = msg.sender;
+  
+  function getOwner() public view returns(address) { return owner; }
 
   // This modifier guarantees that the one executing the function is the given account number.
   modifier onlyBy(address _account) {
@@ -34,15 +38,15 @@ contract RockPaperScissors {
 /* Utilities specific to the game */  
 
   mapping (string => mapping(string => int)) payoffMatrix;
-  address public player1;
-  address public player2;
+  address payable public player1;
+  address payable public player2;
   string public player1Choice;
   string public player2Choice;
   string public reply;
 
   constructor() public {
-    player1 = 0;
-    player2 = 0;
+    player1 = null_address;
+    player2 = null_address;
     player1Choice = "";
     player2Choice = "";
     payoffMatrix["rock"]["rock"] = 3;
@@ -56,11 +60,11 @@ contract RockPaperScissors {
     payoffMatrix["scissors"]["scissors"] = 3;
   }
 
-  function play(string choice) public
+  function play(string memory choice) public
            payable
            costs(100 finney /* = 0.1 ether */)
-           returns (string)  {
-    if (player1 == 0)  {   // sender is the first player
+           returns (string memory)  {
+    if (player1 == null_address)  {   // sender is the first player
       player1 = msg.sender;
       player1Choice = choice;
       reply = "Your choice is registered; wait for the next player!";
@@ -89,8 +93,8 @@ contract RockPaperScissors {
       // unregister players and choices
       player1Choice = "";
       player2Choice = "";
-      player1 = 0;
-      player2 = 0;
+      player1 = null_address;
+      player2 = null_address;
     }
     return reply;
   }

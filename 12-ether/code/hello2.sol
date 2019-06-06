@@ -1,21 +1,18 @@
 // A second "hello world" program with an ability to change the status.
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.9;
 
 contract hello2  {
-     
-     // A dynamic string variable.
-     // Change to "bytes32" to limit its length to 32 bytes.
      string public greeting;
-     
+      
      // Events that get logged on the blockchain
      event GreetingChanged(string _greeting);
 
-     constructor(string _greeting) public {
+     constructor(string memory _greeting) public {
          greeting = _greeting;
      }
  
      // Change the greeting message
-     function setGreeting(string _greeting) public {
+     function setGreeting(string memory _greeting) public {
          greeting = _greeting;
          
          // Log an event that the greeting message has been updated
@@ -23,8 +20,7 @@ contract hello2  {
      }
  
      // Get the greeting message
-     function greet() public view returns (string _greeting) {
+     function greet() public view returns (string memory _greeting) {
         _greeting = greeting;
      }
 }
-
